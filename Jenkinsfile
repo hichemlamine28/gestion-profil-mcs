@@ -573,7 +573,7 @@ def getEnvArray(projet_settings, google_credential, pom){
 }
 
 def getImageFullName(projet_settings, google_credential, pom){
-        return projet_settings.gcp.container_registry.location + '/' + google_credential.project_id + '/' + pom.getArtifactId() + ':' + pom.getVersion() + '.' + server + ".b" + ${BUILD_NUMBER}
+        return projet_settings.gcp.container_registry.location + '/' + google_credential.project_id + '/' + pom.getArtifactId() + ':latest'
     }
 
 
