@@ -57,17 +57,29 @@ node('master'){
 
        if(env=="Qualif"){
        server='qualif'
+       idproject="linkinnov-env-test"
+       cluster="linkinnov-qualif-app"
+       jsonfile='file-linkinnov-env-test-a00032f98c45.json'
        } 
        else if(env=='Prod'){
-       server='prod'       
+       server='prod'
+       idproject="linkinnov-221611"
+       cluster="linkinnov-prod-app"
+       jsonfile='file-linkinnov-221611-1b9d82fcb573.json'       
        } 
        else{
-       server='qualif'      
+       server='qualif'
+       idproject="linkinnov-env-test"
+       cluster="linkinnov-qualif-app"
+       jsonfile='file-linkinnov-env-test-a00032f98c45.json'       
        }  
 
        
    echo "Environnement : ${env}" 
-   echo "server    =   ${server}"  
+   echo "server    =   ${server}"
+   echo "idproject =   ${idproject}"
+   echo "cluster   =   ${cluster}"
+   echo "jsonfile  =   ${jsonfile}"  
    
    }
    
@@ -289,7 +301,7 @@ node('slave') {
                     -v /var/run/docker.sock:/var/run/docker.sock 
                     --group-add 999
                 ''') {
-                    withCredentials([file(credentialsId: projet_settings.jenkins.gcp.credentialsId, variable: 'GOOGLE_CLOUD_CREDENTIAL')]) {
+                    withCredentials([file(credentialsId: jsonfile, variable: 'GOOGLE_CLOUD_CREDENTIAL')]) {
                         stage('Push Application to Google Container Registry') {
                         
 
@@ -369,7 +381,7 @@ def operateToKubernetes(server, projet_settings, google_credential, pom) {
                     -v /var/run/docker.sock:/var/run/docker.sock 
                     --group-add 999
                 ''') {
-                    withCredentials([file(credentialsId: projet_settings.jenkins.gcp.credentialsId, variable: 'GOOGLE_CLOUD_CREDENTIAL')]) {
+                    withCredentials([file(credentialsId: jsonfile, variable: 'GOOGLE_CLOUD_CREDENTIAL')]) {
 
                             // echo 'show k8s config'
                             // for filename in $(find configs/k8s/${ENV_NAME}/ -type f); do cat configs/k8s/${ENV_NAME}/${filename}; done
@@ -537,7 +549,7 @@ def stopTestEnv() {
 def getGoogleCredentialsObject(projet_settings){
     withCredentials(
         [
-            file(credentialsId: projet_settings.jenkins.gcp.credentialsId, variable: 'GOOGLE_CLOUD_CREDENTIAL')
+            file(credentialsId: jsonfile, variable: 'GOOGLE_CLOUD_CREDENTIAL')
         ]
     ) {
         google_credential = readJSON file: GOOGLE_CLOUD_CREDENTIAL
@@ -549,7 +561,7 @@ def getEnvArray(projet_settings, google_credential, pom){
     return [
         'ENV_NAME=' + server,
         'GOOGLE_CLOUD_CREDENTIAL_ID=' + projet_settings.gcp.credentialsId,
-        'GOOGLE_CLOUD_PROJECT_ID=' + google_credential.project_id,
+        'GOOGLE_CLOUD_PROJECT_ID=' + idproject,
         'GOOGLE_CLOUD_AUTH_KIND=serviceaccount',
         'GOOGLE_CLOUD_COMPUTE_SERVICE_ACCOUNT=' + projet_settings.gcp.compute_service_account,
         'GOOGLE_CLOUD_CONTAINER_REGISTRY_LOCATION=' + projet_settings.gcp.container_registry.location,
