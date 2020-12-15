@@ -317,7 +317,7 @@ node('slave') {
 
 
         /* run Image on Kubernetes */
-        operateToKubernetes(PROCEDURE, projet_settings, google_credential, pom)
+        operateToKubernetes(server, projet_settings, google_credential, pom)
 
     } catch (e) {
         throw e
@@ -350,7 +350,7 @@ def publish() {
 
 
 
-def operateToKubernetes(PROCEDURE, projet_settings, google_credential, pom) {
+def operateToKubernetes(server, projet_settings, google_credential, pom) {
         withEnv(getEnvArray(projet_settings, google_credential, pom)) {
             /**
              * OPERER L'APPLICATION DANS KUBERNETES
