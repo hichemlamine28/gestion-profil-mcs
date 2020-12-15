@@ -554,7 +554,7 @@ def getEnvArray(projet_settings, google_credential, pom){
         'GOOGLE_CLOUD_COMPUTE_SERVICE_ACCOUNT=' + projet_settings.gcp.compute_service_account,
         'GOOGLE_CLOUD_CONTAINER_REGISTRY_LOCATION=' + projet_settings.gcp.container_registry.location,
         'GOOGLE_CLOUD_CONTAINER_REGISTRY_URL=' + projet_settings.gcp.container_registry.location + '/' + google_credential.project_id + '/',
-        'GOOGLE_CLOUD_KUBERNETES_NAME=' + projet_settings.gcp.kubernetes.name,
+        'GOOGLE_CLOUD_KUBERNETES_NAME=' + "linkinnov-"+server+"-app",
         'GOOGLE_CLOUD_KUBERNETES_ZONE=' + projet_settings.gcp.kubernetes.zone,
         'GOOGLE_CLOUD_KUBERNETES_NAMESPACE=' + server,
         'DOCKER_IMAGE_NAME=' + projet_settings.docker.image.name,
